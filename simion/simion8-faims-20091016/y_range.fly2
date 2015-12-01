@@ -1,0 +1,19 @@
+particles {
+  coordinates = 0,
+  standard_beam {
+    tob = 0,
+    mass = 100,
+    charge = 1,
+    x = 0.1,
+    y = arithmetic_sequence {
+      first = -0.2,
+      last = 0.2,
+      n = 5
+    },
+    z = 0,
+    ke = 0.01,
+    cwf = 1,
+    color = 1,
+    direction = vector(1, 0, 0)
+  }
+}

@@ -1,0 +1,68 @@
+particles {
+  coordinates = 0,
+  standard_beam {
+    n = 1,
+    tob = 0,
+    mass = 100,
+    charge = 1,
+    x = 0.1,
+    y = 0,
+    z = 0,
+    ke = 0.01,
+    cwf = 1,
+    color = 1,
+    direction = vector(1, 0, 0)
+  },
+  standard_beam {
+    n = 1,
+    tob = 0,
+    mass = 101,
+    charge = 1,
+    x = 0.1,
+    y = 0,
+    z = 0,
+    ke = 0.01,
+    cwf = 1,
+    color = 2,
+    direction = vector(1, 0, 0)
+  },
+  standard_beam {
+    n = 1,
+    tob = 0,
+    mass = 102,
+    charge = 1,
+    x = 0.1,
+    y = 0,
+    z = 0,
+    ke = 0.01,
+    cwf = 1,
+    color = 3,
+    direction = vector(1, 0, 0)
+  },
+  standard_beam {
+    n = 1,
+    tob = 0,
+    mass = 103,
+    charge = 1,
+    x = 0.1,
+    y = 0,
+    z = 0,
+    ke = 0.01,
+    cwf = 1,
+    color = 4,
+    direction = vector(1, 0, 0)
+  },
+  standard_beam {
+    n = 1,
+    tob = 0,
+    mass = 104,
+    charge = 1,
+    x = 0.1,
+    y = 0,
+    z = 0,
+    ke = 0.01,
+    cwf = 1,
+    color = 5,
+    direction = vector(1, 0, 0)
+  }
+}

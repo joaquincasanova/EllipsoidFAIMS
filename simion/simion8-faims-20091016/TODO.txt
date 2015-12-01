@@ -1,0 +1,6 @@
+
+  - Only plates.iob and spectrum.iob currently work correctly
+    under SDS_faims_mode == 1.  I have not yet updated the
+    other IOB files.
+  - excellib.lua might not work correctly under Excel 2007.
+

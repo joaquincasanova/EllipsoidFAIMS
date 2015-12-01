@@ -1,0 +1,5 @@
+pa_define(151,151, 151, planar, xzmirror)
+  electrode(1) {fill{notin{sphere(0,0,0,147,147,147)}
+				notin{cylinder(0,0,151,5,5,155)}}}
+  electrode(2) {fill{within{sphere(0,0,0,127,127,127)}}}
+  

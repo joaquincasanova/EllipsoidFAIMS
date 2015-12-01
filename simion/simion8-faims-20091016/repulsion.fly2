@@ -1,0 +1,25 @@
+particles {
+  coordinates = 0,
+  standard_beam {
+    n = 500,
+    tob = uniform_distribution {
+      min = 0,
+      max = 300
+    },
+    mass = 100,
+    charge = 1,
+    x = 0.1,
+    y = uniform_distribution {
+      min = -0.1,
+      max = 0.1
+    },
+    z = uniform_distribution {
+      min = -0.1,
+      max = 0.1
+    },
+    ke = 0.01,
+    cwf = 1,
+    color = 1,
+    direction = vector(1, 0, 0)
+  }
+}

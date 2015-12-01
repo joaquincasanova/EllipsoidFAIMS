@@ -1,0 +1,90 @@
+;=========================================================================
+; m_defs.dat
+; This file holds diffusion and mobility parameters keyed to mass.
+;
+; Notes:
+;
+;   1. Semicolon (;) character starts comment line.  Blank lines are ignored.
+;
+;   2. Each data line has three or five parameters:
+;
+;      mass (u)
+;      diameter d (nm)
+;      Ko reduced mobility (10-4 m2 V-1 s-1)
+;      alpha mobility constant (Td-2).  Optional, defaults to 0.
+;      beta mobility constant (Td-4).   Optional, defaults to 0.
+;
+;      Example: 190,0.69,1.36
+;
+;  3. Two lines with same mass will cause a fatal error:
+;     190,0.69,1.36  ; legal
+;     190,0.85,1.75  ; masses match -- fatal error
+;
+;  4. d and/or Ko can be zero, in which case the program will estimate
+;     them based on ion mass (which may only be a rough estimate).
+;     190,0.69,0   ; d = 0.69 Ko = 0
+;     190,0,1.36   ; d = 0    Ko = 1.36
+;     190,0,0      ; d = 0.69 Ko = 1.37
+;
+;=========================================================================
+
+; mass    diam  Ko     alpha    beta
+; (u)     (nm)  (10-4  (Td-2)   (Td-4)
+;                m2 V-1
+;                s-1)
+
+; Ion data based on J. Chem. Phys., Vol. 114, No. 23, 15 June 2001
+; http://dx.doi.org/10.1063/1.1372186 .
+;
+; FIX! These assume T = 296 K not 273.15 K.
+;
+; FIX! are these ion diameters based on r_m correct?
+;
+; [*] note: program requires masses to be different
+; -- Deprotonated ions.
+74.055,    0.74,  2.42,17.39E-6,   33.7E-12  ; Glycine
+88.086,    0.70,  2.32,12.04E-6,   -7.5E-12  ; Alanine
+104.085,   0.70,  2.28,12.40E-6, -176.8E-12  ; Serine
+114.124,   0.67,  2.22, 7.82E-6,   49.7E-12  ; Proline
+116.142,   0.67,  2.22, 7.97E-6, -218.0E-12  ; Valine
+118.11,    0.68,  2.23, 9.35E-6, -160.0E-12  ; Threonine
+130.12,    0.65,  2.18, 5.55E-6,   -7.6E-12  ; Hydroxyproline
+130.16,    0.65,  2.18, 5.43E-6, -184.8E-12  ; Leucine
+130.16001, 0.65,  2.18, 5.15E-6,  -57.8E-12  ; Isoleucine [*]
+131.11,    0.68,  2.21, 9.72E-6, -392.8E-12  ; Asparagine
+132.09,    0.68,  2.20,10.25E-6, -595.5E-12  ; Aspartic Acid
+145.14,    0.67,  2.17, 6.99E-6, -149.6E-12  ; Glutamine
+146.12,    0.66,  2.16, 7.12E-6, -401.1E-12  ; Glutamic Acid
+148.2,     0.65,  2.16, 6.43E-6, -395.0E-12  ; Methionine
+154.148,   0.65,  2.15, 5.45E-6,  -88.8E-12  ; Histidine
+164.184,   0.65,  2.14, 5.31E-6, -185.0E-12  ; Phenylalanine
+203.22,    0.63,  2.10, 2.71E-6,  -32.4E-12  ; Tryptophan
+; -- Protonated ions.
+76.075,    0.66,  2.32, 9.65E-6, -152.4E-12  ; Glycine
+90.102,    0.66,  2.27, 8.50E-6, -203.7E-12  ; Alanine
+106.101,   0.66,  2.23, 7.48E-6, -184.1E-12  ; Serine
+116.14,    0.66,  2.21, 7.08E-6,  -99.1E-12  ; Proline
+120.13,    0.66,  2.20, 6.02E-6,   -6.0E-12  ; Threonine
+122.16,    0.65,  2.19, 5.98E-6,  -58.9E-12  ; Cysteine
+132.14,    0.65,  2.18, 5.82E-6, -109.8E-12  ; Hydroxyproline
+132.183,   0.64,  2.17, 4.24E-6,   11.6E-12  ; Leucine
+132.183001,0.64,  2.17, 4.06E-6,   79.0E-12  ; Isoleucine [*]
+133.127,   0.66,  2.18, 6.26E-6, -118.4E-12  ; Asparagine
+147.154,   0.65,  2.16, 5.76E-6, -203.8E-12  ; Glutamine
+147.197,   0.63,  2.14, 3.83E-6, -250.9E-12  ; Lysine
+148.139,   0.65,  2.16, 5.59E-6, -178.5E-12  ; Glutamic Acid
+150.22,    0.64,  2.15, 4.42E-6,   -4.3E-12  ; Methionine
+156.164,   0.64,  2.14, 4.53E-6, -167.3E-12  ; Histidine
+166.2,     0.63,  2.12, 2.96E-6,   23.3E-12  ; Phenylalanine
+205.236,   0.60,  2.09, 1.27E-6,    1.8E-12  ; Tryptophan
+
+; Test ions for demonstration only.
+100,       0.64,  2.17,    0,       0
+101,       0.64,  2.17,   10E-6,    0
+102,       0.64,  2.17,  -10E-6,    0
+103,       0.64,  2.17,    0,    1500E-12
+104,       0.64,  2.17,    0,   -1500E-12
+
+; Test - Hydrated proton
+19,           0,  2.10, 2.02E-5,  -3.38E-10
+303.35,           0,  0, 1.1352e-6, -0.6258E-10
