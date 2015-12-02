@@ -68,16 +68,28 @@ def trans_diff(Tt, K, q):
     #print tmp, K
     return BOLTZ*Tt*K*tmp/q
 
-def focus(r,k,alph,dalph,S):
+def focus(r,k,S,C,dCdS):
     A = -2
     B = r
-    C = k*(-alph*dalph*S*S)/(1+alph+dalph*S)/(1+alph+dalph*S)
+    C = k*(C-dCdS*S)
     return A/B*C
+
+def krylovC(D, HV, LV, alph_HV, alph_LV, dalph_HV, dalph_LV):
+    A=D*HV*alph_HV+(1-D)*LV*alph_LV
+    B=1+D*alph_LV+(1-D)*alph_HV+D*dalph_HV*HV+(1-D)*dalph_LV*LV
+    return A/B
+
+def krylovdCdS(D, HV, LV, alph_HV, alph_LV, dalph_HV, dalph_LV):
+    A=(D*alph_LV+(1-D)*alph_HV)
+    B=(1+D*alph_LV+(1-D)*alph_HV+D*dalph_HV*HV+(1-D)*dalph_LV*LV)
+    C=D*dalph_HV*HV+(1-D)*dalph_LV*LV
+    return A/B*(1-C/B)
+
 #Constants:
 ri = 12e-3
 ro = 14e-3
 
-r = (r1+r2)/2
+r = (ri+ro)/2
 
 DV = 500
 D = 0.33
@@ -108,40 +120,33 @@ th=np.linspace(0,PI,nGridth)
 
 TH,PH = np.meshgrid(th,ph)
 
-e = E(ro,ri,r,HV)
-k = K(e,No,k0,a2,a4)
-alph=alpha(e,No,a2,a4)
-dalph=dalpha_dE(e,No,a2,a4)
+e_HV = E(ro,ri,r,HV)
+k_HV = K(e_HV,No,k0,a2,a4)
+alph_HV=alpha(e_HV,No,a2,a4)
+dalph_HV=dalpha_dE(e_HV,No,a2,a4)
 
-gamma = focus(r,k,alph,dalph,e)
+e_LV = E(ro,ri,r,LV)
+k_LV = K(e_LV,No,k0,a2,a4)
+alph_LV=alpha(e_LV,No,a2,a4)
+dalph_LV=dalpha_dE(e_LV,No,a2,a4)
+
+S = e_HV
+C = krylovC(D, e_HV, e_LV, alph_HV, alph_LV, dalph_HV, dalph_LV)
+dCdS = krylovdCdS(D, HV, LV, alph_HV, alph_LV, dalph_HV, dalph_LV)
+
+k = k_LV*(1-D)+k_HV*D
+
+gamma = focus(r,k,S,C,dCdS)
 
 fig = plt.figure()
-ax = fig.add_subplot(221, projection='3d')
+ax = fig.add_subplot(121, projection='3d')
 ax.plot_surface(PH,TH, gamma,  rstride=4, cstride=4, color='b')
 plt.xlabel(r'$\phi$')
 plt.ylabel(r'$\theta$')
 plt.title(r'$\gamma$')
 
-ax = fig.add_subplot(222, projection='3d')
-ax.plot_surface(PH,TH, e,  rstride=4, cstride=4, color='b')
-plt.xlabel(r'$\phi$')
-plt.ylabel(r'$\theta$')
-plt.title('E')
-e = E(ro,ri,r,LV)
-k = K(e,No,k0,a2,a4)
-alph=alpha(e,No,a2,a4)
-dalph=dalpha_dE(e,No,a2,a4)
-
-gamma = focus(r,k,alph,dalph,e)
-
-ax = fig.add_subplot(223, projection='3d')
-ax.plot_surface(PH,TH, gamma,  rstride=4, cstride=4, color='b')
-plt.xlabel(r'$\phi$')
-plt.ylabel(r'$\theta$')
-plt.title(r'$\gamma$')
-
-ax = fig.add_subplot(224, projection='3d')
-ax.plot_surface(PH,TH, e,  rstride=4, cstride=4, color='b')
+ax = fig.add_subplot(122, projection='3d')
+ax.plot_surface(PH,TH, e_HV,  rstride=4, cstride=4, color='b')
 plt.xlabel(r'$\phi$')
 plt.ylabel(r'$\theta$')
 plt.title('E')
