@@ -95,7 +95,7 @@ def E(r1,r2,h2,h3,rho,mu,nu,V):
     return A/B
 
 def rmn2xyz(h2,h3,rho,mu,nu):
-    h1=h2-h3
+    h1=np.sqrt(h2*h2-h3*h3)
     x=rho*mu*nu/h2/h3
     y=np.sqrt(rho*rho-h3*h3)*np.sqrt(mu*mu-h3*h3)*np.sqrt(h3*h3-nu*nu)/h1/h3
     z=np.sqrt(rho*rho-h2*h2)*np.sqrt(h2*h2-mu*mu)*np.sqrt(h2*h2-nu*nu)/h1/h3
@@ -137,11 +137,12 @@ def krylovdCdS(D, HV, LV, alph_HV, alph_LV, dalph_HV, dalph_LV):
 #Constants:
 A1 = 12e-3
 A2 = 6e-3
-A3 = 5.998e-3
+A3 = 5.9999e-3
 h2 = np.sqrt(np.power(A1,2)-np.power(A3,2))
 h3 = np.sqrt(np.power(A1,2)-np.power(A2,2))
+print A1,A2,A3,h2,h3
 
-r1 = 12e-3
+r1 = 12.5e-3
 r2 = 14e-3
 
 r = (r1+r2)/2
@@ -167,9 +168,9 @@ with open('heavy.csv', 'rb') as fi:
             k0 = K0(d_ion)
 #Grid:
 nGridnu = 100
-nuDel = (h3)/(nGridnu-1)
-nu=np.linspace(0,h3,nGridnu)
-nGridmu = 50
+nuDel = (2*h3)/(nGridnu-1)
+nu=np.linspace(-h3,h3,nGridnu)
+nGridmu = 100
 muDel = (h2-h3)/(nGridmu-1)
 mu=np.linspace(h3,h2,nGridmu)
 
@@ -193,19 +194,26 @@ k = k_LV*(1-D)+k_HV*D
 
 gamma = focus(r, MU, NU, h2, h3,k,S,C,dCdS)
 
+x2,y2,z2=rmn2xyz(h2,h3,r2,MU,NU)
+x1,y1,z1=rmn2xyz(h2,h3,r1,MU,NU)
+
 fig = plt.figure()
-ax = fig.add_subplot(121, projection='3d')
+ax = fig.add_subplot(131, projection='3d')
 ax.plot_surface(NU,MU, gamma,  rstride=4, cstride=4, color='b')
 plt.xlabel(r'$\nu$')
 plt.ylabel(r'$\mu$')
 plt.title(r'$\gamma$')
 
-ax = fig.add_subplot(122, projection='3d')
+ax = fig.add_subplot(132, projection='3d')
 ax.plot_surface(NU,MU, e_HV,  rstride=4, cstride=4, color='b')
 plt.xlabel(r'$\nu$')
 plt.ylabel(r'$\mu$')
 plt.title('E')
-plt.show()
 
-                        
-        
+ax = fig.add_subplot(133, projection='3d')
+ax.plot_surface(x1,y1, z1,  rstride=4, cstride=4, color='b')
+ax.plot_surface(x2,y2, z2,  rstride=4, cstride=4, color='r')
+plt.xlabel(r'$x$')
+plt.ylabel(r'$y$')
+plt.title(r'$z$')
+plt.show()

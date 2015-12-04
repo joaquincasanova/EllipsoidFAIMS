@@ -87,7 +87,7 @@ def E(r1,r2,h2,h3,rho,mu,nu,V):
     return A/B
 
 def rmn2xyz(h2,h3,rho,mu,nu):
-    h1=h2-h3
+    h1=np.sqrt(h2*h2-h3*h3)
     x=rho*mu*nu/h2/h3
     y=np.sqrt(rho*rho-h3*h3)*np.sqrt(mu*mu-h3*h3)*np.sqrt(h3*h3-nu*nu)/h1/h3
     z=np.sqrt(rho*rho-h2*h2)*np.sqrt(h2*h2-mu*mu)*np.sqrt(h2*h2-nu*nu)/h1/h3
@@ -113,7 +113,7 @@ A3 = 5e-3
 h2 = np.sqrt(np.power(A1,2)-np.power(A3,2))
 h3 = np.sqrt(np.power(A1,2)-np.power(A2,2))
 
-r1 = 12e-3
+r1 = 12.5e-3
 r2 = 14e-3
 rmax=(r1+r2)/2+re
 rmin=(r1+r2)/2-re
@@ -160,7 +160,7 @@ with open('heavy.csv', 'rb') as fi:
                 rho[0]=np.random.uniform(rmin,rmax,1)
                 mu[0]=np.random.uniform(mumin,mumax,1)
                 nu[0]=np.random.uniform(numin,numax,1)
-                print rho[0], mu[0], nu[0]
+                #print rho[0], mu[0], nu[0]
                 #Timestep
                 t0 = np.random.rand(1)*1/f
                 t=0

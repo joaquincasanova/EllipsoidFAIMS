@@ -64,8 +64,8 @@ flow = 10.*0.001/60 #m3/s
 
 re = 5e-4 #m
 
-ri = 12.7e-3
-ro = 14.7e-3
+ri = 12e-3
+ro = 14e-3
 rmax=(ri+ro)/2+re
 rmin=(ri+ro)/2-re
 epsilon = np.arcsin(re/ro)

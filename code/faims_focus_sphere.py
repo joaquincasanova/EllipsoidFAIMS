@@ -69,10 +69,10 @@ def trans_diff(Tt, K, q):
     return BOLTZ*Tt*K*tmp/q
 
 def focus(r,k,S,C,dCdS):
-    A = -2
+    A = 2
     B = r
-    C = k*(C-dCdS*S)
-    return A/B*C
+    cc= k*(C-dCdS*S)
+    return A/B*cc
 
 def krylovC(D, HV, LV, alph_HV, alph_LV, dalph_HV, dalph_LV):
     A=D*HV*alph_HV+(1-D)*LV*alph_LV
@@ -112,8 +112,8 @@ with open('heavy.csv', 'rb') as fi:
             k0 = K0(d_ion)
 #Grid:
 nGridph = 100
-phDel = (PI)/(nGridph-1)
-ph=np.linspace(0,PI,nGridph)
+phDel = (PI/2)/(nGridph-1)
+ph=np.linspace(0,PI/2,nGridph)
 nGridth = 50
 thDel = (PI)/(nGridth-1)
 th=np.linspace(0,PI,nGridth)
@@ -138,16 +138,26 @@ k = k_LV*(1-D)+k_HV*D
 
 gamma = focus(r,k,S,C,dCdS)
 
+x2,y2,z2=rtp2xyz(ro,TH,PH)
+x1,y1,z1=rtp2xyz(ri,TH,PH)
+
 fig = plt.figure()
-ax = fig.add_subplot(121, projection='3d')
+ax = fig.add_subplot(131, projection='3d')
 ax.plot_surface(PH,TH, gamma,  rstride=4, cstride=4, color='b')
 plt.xlabel(r'$\phi$')
 plt.ylabel(r'$\theta$')
 plt.title(r'$\gamma$')
 
-ax = fig.add_subplot(122, projection='3d')
+ax = fig.add_subplot(132, projection='3d')
 ax.plot_surface(PH,TH, e_HV,  rstride=4, cstride=4, color='b')
 plt.xlabel(r'$\phi$')
 plt.ylabel(r'$\theta$')
 plt.title('E')
+
+ax = fig.add_subplot(133, projection='3d')
+ax.plot_surface(x1,y1, z1,  rstride=4, cstride=4, color='b')
+ax.plot_surface(x2,y2, z2,  rstride=4, cstride=4, color='r')
+plt.xlabel(r'$x$')
+plt.ylabel(r'$y$')
+plt.title(r'$z$')
 plt.show()
