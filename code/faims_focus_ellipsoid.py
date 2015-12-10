@@ -137,12 +137,12 @@ def krylovdCdS(D, HV, LV, alph_HV, alph_LV, dalph_HV, dalph_LV):
 #Constants:
 A1 = 12e-3
 A2 = 6e-3
-A3 = 5.9999e-3
+A3 = 5e-3
 h2 = np.sqrt(np.power(A1,2)-np.power(A3,2))
 h3 = np.sqrt(np.power(A1,2)-np.power(A2,2))
 print A1,A2,A3,h2,h3
 
-r1 = 12.5e-3
+r1 = 12e-3
 r2 = 14e-3
 
 r = (r1+r2)/2

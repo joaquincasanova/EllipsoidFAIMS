@@ -81,9 +81,13 @@ def hnu(h2,h3,rho,mu,nu):
     B=np.sqrt(h3*h3-nu*nu)*np.sqrt(h2*h2-nu*nu)
     return A/B
 
-def E(r1,r2,h2,h3,rho,mu,nu,V):
-    A=-V/np.sqrt(rho*rho-mu*mu)/np.sqrt(rho*rho-nu*nu)
+def eB(r1,r2,h2,h3):
     B=-I01(r2,h2,h3)+I01(r1,h2,h3)
+    return B
+
+def E(eB,rho,mu,nu,V):
+    A=-V/np.sqrt(rho*rho-mu*mu)/np.sqrt(rho*rho-nu*nu)
+    B=eB#-I01(r2,h2,h3)+I01(r1,h2,h3)
     return A/B
 
 def rmn2xyz(h2,h3,rho,mu,nu):
@@ -113,12 +117,16 @@ A3 = 5e-3
 h2 = np.sqrt(np.power(A1,2)-np.power(A3,2))
 h3 = np.sqrt(np.power(A1,2)-np.power(A2,2))
 
-r1 = 12.5e-3
+r1 = 12e-3
 r2 = 14e-3
+
+B = eB(r1,r2,h2,h3)
+print B
+
 rmax=(r1+r2)/2+re
 rmin=(r1+r2)/2-re
-numax=h3
-numin=h3*np.sqrt(1-re*re/(r2*r2-h3*h3))
+numax=0
+numin=0#np.sqrt(1-re*re/(r2*r2-h3*h3))
 mumax=h2
 mumin=h3
 #Init velocity: 
@@ -190,7 +198,7 @@ with open('heavy.csv', 'rb') as fi:
                     else:
                         V=LV
 
-                    e=E(r1,r2,h2,h3,rho[i],mu[i],nu[i],V)
+                    e=E(B,rho[i],mu[i],nu[i],V)
                     k=K(e,No,k0,a2,a4)
                     Vrho = vrho(k,e)
                     Vnu = vnu(r1,r2,h2,h3,rho[i],nu[i],flow)
@@ -215,7 +223,7 @@ with open('heavy.csv', 'rb') as fi:
                     t=t+delt
                     i=i+1           
 
-            figname = "test_para_ellipsoid_2D_{}_{}.png".format(CV,row[5])
+            figname = "test_para_ellipsoid_2D_{}_{}_quarter.png".format(CV,row[5])
             savefig(figname)
             close()
 
@@ -269,7 +277,7 @@ with open('heavy.csv', 'rb') as fi:
                     else:
                         V=LV
 
-                    e=E(r1,r2,h2,h3,rho[i],mu[i],nu[i],V)
+                    e=E(B,rho[i],mu[i],nu[i],V)
                     k=K(e,No,k0,a2,a4)
                     Vrho = vrho(k,e)
                     Vnu = vnu(r1,r2,h2,h3,rho[i],nu[i],flow)
@@ -292,7 +300,7 @@ with open('heavy.csv', 'rb') as fi:
                     mu[i+1]=mu[i]+np.sqrt(2.0*dmu*delt)*np.random.randn(1)/hmu(h2,h3,rho[i],mu[i],nu[i])
                     t=t+delt
                     i=i+1           
-            figname = "test_ortho_ellipsoid_2D_{}_{}.png".format(CV,row[5])
+            figname = "test_ortho_ellipsoid_2D_{}_{}_quarter.png".format(CV,row[5])
             savefig(figname)
             close()
 
