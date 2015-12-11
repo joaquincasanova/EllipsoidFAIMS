@@ -89,9 +89,13 @@ def hnu(h2,h3,rho,mu,nu):
     B=np.sqrt(h3*h3-nu*nu)*np.sqrt(h2*h2-nu*nu)
     return A/B
 
-def E(r1,r2,h2,h3,rho,mu,nu,V):
-    A=-V/np.sqrt(rho*rho-mu*mu)/np.sqrt(rho*rho-nu*nu)
+def eB(r1,r2,h2,h3):
     B=-I01(r2,h2,h3)+I01(r1,h2,h3)
+    return B
+
+def E(eB,rho,mu,nu,V):
+    A=-V/np.sqrt(rho*rho-mu*mu)/np.sqrt(rho*rho-nu*nu)
+    B=eB#-I01(r2,h2,h3)+I01(r1,h2,h3)
     return A/B
 
 def rmn2xyz(h2,h3,rho,mu,nu):
@@ -135,16 +139,18 @@ def krylovdCdS(D, HV, LV, alph_HV, alph_LV, dalph_HV, dalph_LV):
     return A/B*(1-C/B)
 
 #Constants:
-A1 = 12e-3
+A1 = 24e-3
 A2 = 6e-3
 A3 = 5e-3
 h2 = np.sqrt(np.power(A1,2)-np.power(A3,2))
 h3 = np.sqrt(np.power(A1,2)-np.power(A2,2))
 print A1,A2,A3,h2,h3
 
-r1 = 12e-3
-r2 = 14e-3
+r1 = 24e-3
+r2 = 25e-3
 
+B = eB(r1,r2,h2,h3)
+print B
 r = (r1+r2)/2
 
 DV = 500
@@ -176,12 +182,12 @@ mu=np.linspace(h3,h2,nGridmu)
 
 MU,NU = np.meshgrid(mu,nu)
 
-e_HV = E(r1,r2,h2,h3,r,MU,NU,HV)
+e_HV = E(B,r,MU,NU,HV)
 k_HV = K(e_HV,No,k0,a2,a4)
 alph_HV=alpha(e_HV,No,a2,a4)
 dalph_HV=dalpha_dE(e_HV,No,a2,a4)
 
-e_LV = E(r1,r2,h2,h3,r,MU,NU,LV)
+e_LV = E(B,r,MU,NU,LV)
 k_LV = K(e_LV,No,k0,a2,a4)
 alph_LV=alpha(e_LV,No,a2,a4)
 dalph_LV=dalpha_dE(e_LV,No,a2,a4)

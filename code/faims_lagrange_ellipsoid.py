@@ -96,14 +96,36 @@ def rmn2xyz(h2,h3,rho,mu,nu):
     y=np.sqrt(rho*rho-h3*h3)*np.sqrt(mu*mu-h3*h3)*np.sqrt(h3*h3-nu*nu)/h1/h3
     z=np.sqrt(rho*rho-h2*h2)*np.sqrt(h2*h2-mu*mu)*np.sqrt(h2*h2-nu*nu)/h1/h3
     return x,y,z
+
+def xyz2rmn(h2,h3,x,y,z):
+    a = -(x*x+y*y+z*z+h3*h3+h2*h2)
+    b = (h3*h3+h2*h2)*x*x+h2*h2*y*y+h3*h3*z*z+h3*h3*h2*h2
+    c = -h3*h3*h2*h2*x*x
+    A = -c/2.0+a*b/6.0-a*a*a/27.0+np.lib.scimath.sqrt((a*a*a*c+b*b*b-a*a*b*b)/27.0+(9.0*c*c-6.0*a*b*c+a*a*b*b)/36.0)
+    B = -c/2.0+a*b/6.0-a*a*a/27.0-np.lib.scimath.sqrt((a*a*a*c+b*b*b-a*a*b*b)/27.0+(9.0*c*c-6.0*a*b*c+a*a*b*b)/36.0)
+    X = np.real(np.power(A,1.0/3.0))
+    Y = np.imag(np.power(A,1.0/3.0)) 
+    print X, Y
+    k1=-a/3.0+2.0*X
+    k2=-a/3.0-X-np.sqrt(Y)
+    k3=-a/3.0-X+np.sqrt(Y)
+    print k1,k2,k3
+    rho = np.sqrt(k1)
+    nu = np.sqrt(k2)
+    mu = np.sqrt(k3)
+    return rho, mu, nu
+
 def long_temp(m_ion, v):
     return T_STP + (1+m_ion/(m_ion+AMU_AIR/2.0))*AMU_AIR*AMU_TO_KG*v*v/BOLTZ/3
+
 def long_diff(Tl, K, K0, E, N, a2, a4,q):
     tmp = 1.0+((E/N*1e21)/K)*(K0*(2.0*a2*(E/N*1e21)+4.0*a4*np.power(E/N*1e21,3)))
     #print tmp, K
     return BOLTZ*Tl*K*tmp/q
+
 def trans_temp(m_ion, v):
     return T_STP + (1-(m_ion/2.0)/(m_ion+AMU_AIR/2.0))*AMU_AIR*AMU_TO_KG*v*v/BOLTZ
+
 def trans_diff(Tt, K, q):
     tmp = 1.0
     #print tmp, K
@@ -111,15 +133,15 @@ def trans_diff(Tt, K, q):
 #Constants:
 flow = 10.*0.001/60 #m3/s
 re = 5e-4
-A1 = 12e-3
-A2 = 6e-3
-A3 = 5e-3
+A1 = 24e-3
+A2 = 12e-3
+A3 = 10e-3
 h2 = np.sqrt(np.power(A1,2)-np.power(A3,2))
 h3 = np.sqrt(np.power(A1,2)-np.power(A2,2))
 
-r1 = 12e-3
-r2 = 14e-3
-
+r1 = 24e-3
+r2 = 26e-3
+rbar = (r1+r2)/2.0
 B = eB(r1,r2,h2,h3)
 print B
 
@@ -129,6 +151,13 @@ numax=0
 numin=0#np.sqrt(1-re*re/(r2*r2-h3*h3))
 mumax=h2
 mumin=h3
+
+zmax = np.sqrt(rbar*rbar-h2*h2)+re
+zmin = np.sqrt(rbar*rbar-h2*h2)-re
+ymax = re
+ymin = -re
+xmax = re
+xmin = -re
 #Init velocity: 
 v_entry = flow/PI/re/re
 D = 0.33 #fraction
@@ -165,10 +194,15 @@ with open('heavy.csv', 'rb') as fi:
                 LV = -DV*D/(1-D)+CV
 
             #Init location:
+                x=np.random.uniform(xmin,xmax,1)
+                y=np.random.uniform(ymin,ymax,1)
+                z=np.random.uniform(zmin,zmax,1)
+                print x,y,z
+                rho[0], mu[0], nu[0] = xyz2rmn(h2,h3,x,y,z)
                 rho[0]=np.random.uniform(rmin,rmax,1)
                 mu[0]=np.random.uniform(mumin,mumax,1)
                 nu[0]=np.random.uniform(numin,numax,1)
-                #print rho[0], mu[0], nu[0]
+                print rho[0], mu[0], nu[0]
                 #Timestep
                 t0 = np.random.rand(1)*1/f
                 t=0
@@ -223,7 +257,7 @@ with open('heavy.csv', 'rb') as fi:
                     t=t+delt
                     i=i+1           
 
-            figname = "test_para_ellipsoid_2D_{}_{}_quarter.png".format(CV,row[5])
+            figname = "test_para_ellipsoid_2D_{}_{}_long_quarter.png".format(CV,row[5])
             savefig(figname)
             close()
 
@@ -300,7 +334,7 @@ with open('heavy.csv', 'rb') as fi:
                     mu[i+1]=mu[i]+np.sqrt(2.0*dmu*delt)*np.random.randn(1)/hmu(h2,h3,rho[i],mu[i],nu[i])
                     t=t+delt
                     i=i+1           
-            figname = "test_ortho_ellipsoid_2D_{}_{}_quarter.png".format(CV,row[5])
+            figname = "test_ortho_ellipsoid_2D_{}_{}_long_quarter.png".format(CV,row[5])
             savefig(figname)
             close()
 
