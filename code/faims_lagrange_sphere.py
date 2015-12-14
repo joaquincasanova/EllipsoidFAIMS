@@ -121,6 +121,7 @@ with open('heavy.csv', 'rb') as fi:
                         print "Splat!", DV, CV, t, r[i], th[i]
                         x,y,z=rtp2xyz(r[range(0,i+1,100)],th[range(0,i+1,100)],phi[range(0,i+1,100)])
                         plot(x,y )
+                        axis([-ro, ro, 0, ro])
                         xlabel('x')
                         ylabel('y')
                         title('About as simple as it gets, folks')
@@ -131,6 +132,7 @@ with open('heavy.csv', 'rb') as fi:
                         x,y,z=rtp2xyz(r[range(0,i+1,100)],th[range(0,i+1,100)],phi[range(0,i+1,100)])
 
                         plot(x,y )
+                        axis([-ro, ro, 0, ro])
                         xlabel('x')
                         ylabel('y')
                         title('About as simple as it gets, folks')
@@ -197,6 +199,7 @@ with open('heavy.csv', 'rb') as fi:
                         x,y,z=rtp2xyz(r[range(0,i+1,100)],th[range(0,i+1,100)],phi[range(0,i+1,100)])
 
                         plot(x,y )
+                        axis([-ro, ro, 0, ro])
                         xlabel('x')
                         ylabel('y')
                         title('About as simple as it gets, folks')
@@ -207,6 +210,7 @@ with open('heavy.csv', 'rb') as fi:
                         print "Finished", DV, CV, t, r[i], th[i]
                         x,y,z=rtp2xyz(r[range(0,i+1,100)],th[range(0,i+1,100)],phi[range(0,i+1,100)])
                         plot(x,y )
+                        axis([-ro, ro, 0, ro])
                         xlabel('x')
                         ylabel('y')
                         title('About as simple as it gets, folks')

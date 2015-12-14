@@ -105,11 +105,9 @@ def xyz2rmn(h2,h3,x,y,z):
     B = -c/2.0+a*b/6.0-a*a*a/27.0-np.lib.scimath.sqrt((a*a*a*c+b*b*b-a*a*b*b)/27.0+(9.0*c*c-6.0*a*b*c+a*a*b*b)/36.0)
     X = np.real(np.power(A,1.0/3.0))
     Y = np.imag(np.power(A,1.0/3.0)) 
-    print X, Y
     k1=-a/3.0+2.0*X
-    k2=-a/3.0-X-np.sqrt(Y)
-    k3=-a/3.0-X+np.sqrt(Y)
-    print k1,k2,k3
+    k2=-a/3.0-X-np.sqrt(3)*Y
+    k3=-a/3.0-X+np.sqrt(3)*Y
     rho = np.sqrt(k1)
     nu = np.sqrt(k2)
     mu = np.sqrt(k3)
@@ -129,7 +127,8 @@ def trans_temp(m_ion, v):
 def trans_diff(Tt, K, q):
     tmp = 1.0
     #print tmp, K
-    return BOLTZ*Tt*K*tmp/q      
+    return BOLTZ*Tt*K*tmp/q
+
 #Constants:
 flow = 10.*0.001/60 #m3/s
 re = 5e-4
@@ -152,12 +151,12 @@ numin=0#np.sqrt(1-re*re/(r2*r2-h3*h3))
 mumax=h2
 mumin=h3
 
-zmax = np.sqrt(rbar*rbar-h2*h2)+re
-zmin = np.sqrt(rbar*rbar-h2*h2)-re
+zmax = re+1e-4#np.sqrt(r2*r2-h3*h3)
+zmin = 1e-4#np.sqrt(r1*r1-h3*h3)
 ymax = re
-ymin = -re
-xmax = re
-xmin = -re
+ymin = 0
+xmax = rbar+re
+xmin = rbar-re
 #Init velocity: 
 v_entry = flow/PI/re/re
 D = 0.33 #fraction
@@ -199,9 +198,10 @@ with open('heavy.csv', 'rb') as fi:
                 z=np.random.uniform(zmin,zmax,1)
                 print x,y,z
                 rho[0], mu[0], nu[0] = xyz2rmn(h2,h3,x,y,z)
-                rho[0]=np.random.uniform(rmin,rmax,1)
-                mu[0]=np.random.uniform(mumin,mumax,1)
-                nu[0]=np.random.uniform(numin,numax,1)
+
+                #rho[0]=np.random.uniform(rmin,rmax,1)
+                #mu[0]=np.random.uniform(mumin,mumax,1)
+                #nu[0]=np.random.uniform(numin,numax,1)
                 print rho[0], mu[0], nu[0]
                 #Timestep
                 t0 = np.random.rand(1)*1/f
@@ -209,20 +209,23 @@ with open('heavy.csv', 'rb') as fi:
                 i=0
                 while(i<tres/delt-1):
                     if rho[i]>r2 or rho[i]<r1 or mu[i]*mu[i]<=h3*h3 or mu[i]*mu[i]>=h2*h2 or nu[i]>=h3 or np.isnan(rho[i]) or np.isnan(nu[i]) or np.isnan(mu[i]):
-                        print "Splat!", DV, CV, t, rho[i], nu[i]
+                        print "Splat!", DV, CV, t, rho[i], mu[i], nu[i]
                         x,y,z=rmn2xyz(h2,h3,rho[range(0,i+1,100)],mu[range(0,i+1,100)],nu[range(0,i+1,100)])
-                        plot(x,y)
+                        plot(x,z)
+                        axis([-r2,r2,0,r2])
                         xlabel('x')
-                        ylabel('y')
+                        ylabel('z')
+                        
                         title('About as simple as it gets, folks')
                         grid(True)
                         break
                     if nu[i]*nu[i]>h3*h3:
-                        print "Finished", DV, CV, t, rho[i], nu[i]
+                        print "Finished", DV, CV, t, rho[i], mu[i], nu[i]
                         x,y,z=rmn2xyz(h2,h3,rho[range(0,i+1,100)],mu[range(0,i+1,100)],nu[range(0,i+1,100)])
-                        plot(x,y )
+                        plot(x,z )
+                        axis([-r2,r2,0,r2])
                         xlabel('x')
-                        ylabel('y')
+                        ylabel('z')
                         title('About as simple as it gets, folks')
                         grid(True)
                         break
@@ -276,9 +279,15 @@ with open('heavy.csv', 'rb') as fi:
                 LV = -DV*D/(1-D)+CV
 
             #Init location:
-                rho[0]=np.random.uniform(rmin,rmax,1)
-                mu[0]=np.random.uniform(mumin,mumax,1)
-                nu[0]=np.random.uniform(numin,numax,1)
+                x=np.random.uniform(xmin,xmax,1)
+                y=np.random.uniform(ymin,ymax,1)
+                z=np.random.uniform(zmin,zmax,1)
+                print x,y,z
+                rho[0], mu[0], nu[0] = xyz2rmn(h2,h3,x,y,z)
+
+                #rho[0]=np.random.uniform(rmin,rmax,1)
+                #mu[0]=np.random.uniform(mumin,mumax,1)
+                #nu[0]=np.random.uniform(numin,numax,1)
                 print rho[0], mu[0], nu[0]
                 #Timestep
                 t0 = np.random.rand(1)*1/f
@@ -286,22 +295,24 @@ with open('heavy.csv', 'rb') as fi:
                 i=0
                 while(i<tres/delt-1):
                     if rho[i]>r2 or rho[i]<r1 or mu[i]*mu[i]<=h3*h3 or mu[i]*mu[i]>=h2*h2 or nu[i]>=h3 or np.isnan(rho[i]) or np.isnan(nu[i]) or np.isnan(mu[i]):
-                        print "Splat!", DV, CV, t, rho[i], nu[i]
+                        print "Splat!", DV, CV, t, rho[i], mu[i], nu[i]
                         x,y,z=rmn2xyz(h2,h3,rho[range(0,i+1,100)],mu[range(0,i+1,100)],nu[range(0,i+1,100)])
                         
-                        plot(x,y )
+                        plot(x,z )
+                        axis([-r2,r2,0,r2])
                         xlabel('x')
-                        ylabel('y')
+                        ylabel('z')
                         title('About as simple as it gets, folks')
                         grid(True)
                         break
                     if nu[i]<=-h3:
-                        print "Finished", DV, CV, t, rho[i], nu[i]
+                        print "Finished", DV, CV, t, rho[i], mu[i], nu[i]
                         x,y,z=rmn2xyz(h2,h3,rho[range(0,i+1,100)],mu[range(0,i+1,100)],nu[range(0,i+1,100)])
                         
-                        plot(x,y )
+                        plot(x,z )
+                        axis([-r2,r2,0,r2])
                         xlabel('x')
-                        ylabel('y')
+                        ylabel('z')
                         title('About as simple as it gets, folks')
                         grid(True)
                         break
