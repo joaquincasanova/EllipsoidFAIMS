@@ -151,9 +151,9 @@ numin=0#np.sqrt(1-re*re/(r2*r2-h3*h3))
 mumax=h2
 mumin=h3
 
-zmax = re+1e-4#np.sqrt(r2*r2-h3*h3)
-zmin = 1e-4#np.sqrt(r1*r1-h3*h3)
-ymax = re
+zmax = re#np.sqrt(r2*r2-h3*h3)
+zmin = re#np.sqrt(r1*r1-h3*h3)
+ymax = 0
 ymin = 0
 xmax = rbar+re
 xmin = rbar-re

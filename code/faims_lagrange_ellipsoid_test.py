@@ -111,6 +111,8 @@ def xyz2rmn(h2,h3,x,y,z):
     rho = np.sqrt(k1)
     nu = np.sqrt(k2)
     mu = np.sqrt(k3)
+    if x<0:
+        nu=-nu
     return rho, mu, nu
 
 def long_temp(m_ion, v):
@@ -143,11 +145,11 @@ rbar = (r1+r2)/2.0
 B = eB(r1,r2,h2,h3)
 print B
 
-rmax=(r1+r2)/2+re
-rmin=(r1+r2)/2-re
-numax=0
-numin=0#np.sqrt(1-re*re/(r2*r2-h3*h3))
-mumax=h2
+rmax=r2
+rmin=r1
+numax=1e-4
+numin=1e-4
+mumax=h3
 mumin=h3
 
 #Init velocity: 
