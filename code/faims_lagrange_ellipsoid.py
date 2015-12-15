@@ -193,15 +193,15 @@ with open('heavy.csv', 'rb') as fi:
                 LV = -DV*D/(1-D)+CV
 
             #Init location:
-                x=np.random.uniform(xmin,xmax,1)
-                y=np.random.uniform(ymin,ymax,1)
-                z=np.random.uniform(zmin,zmax,1)
-                print x,y,z
-                rho[0], mu[0], nu[0] = xyz2rmn(h2,h3,x,y,z)
+##                x=np.random.uniform(xmin,xmax,1)
+##                y=np.random.uniform(ymin,ymax,1)
+##                z=np.random.uniform(zmin,zmax,1)
+##                print x,y,z
+##                rho[0], mu[0], nu[0] = xyz2rmn(h2,h3,x,y,z)
 
-                #rho[0]=np.random.uniform(rmin,rmax,1)
-                #mu[0]=np.random.uniform(mumin,mumax,1)
-                #nu[0]=np.random.uniform(numin,numax,1)
+                rho[0]=np.random.uniform(rmin,rmax,1)
+                mu[0]=np.random.uniform(mumin,mumax,1)
+                nu[0]=np.random.uniform(numin,numax,1)
                 print rho[0], mu[0], nu[0]
                 #Timestep
                 t0 = np.random.rand(1)*1/f
@@ -222,11 +222,11 @@ with open('heavy.csv', 'rb') as fi:
                     if nu[i]*nu[i]>h3*h3:
                         print "Finished", DV, CV, t, rho[i], mu[i], nu[i]
                         x,y,z=rmn2xyz(h2,h3,rho[range(0,i+1,100)],mu[range(0,i+1,100)],nu[range(0,i+1,100)])
-                        plot(x,z )
+                        plot(x,z)
                         axis([-r2,r2,0,r2])
                         xlabel('x')
                         ylabel('z')
-                        title('About as simple as it gets, folks')
+                         title('About as simple as it gets, folks')
                         grid(True)
                         break
                     tprime = t-np.floor(t*f)/f
@@ -279,11 +279,11 @@ with open('heavy.csv', 'rb') as fi:
                 LV = -DV*D/(1-D)+CV
 
             #Init location:
-                x=np.random.uniform(xmin,xmax,1)
-                y=np.random.uniform(ymin,ymax,1)
-                z=np.random.uniform(zmin,zmax,1)
-                print x,y,z
-                rho[0], mu[0], nu[0] = xyz2rmn(h2,h3,x,y,z)
+##                x=np.random.uniform(xmin,xmax,1)
+##                y=np.random.uniform(ymin,ymax,1)
+##                z=np.random.uniform(zmin,zmax,1)
+##                print x,y,z
+##                rho[0], mu[0], nu[0] = xyz2rmn(h2,h3,x,y,z)
 
                 #rho[0]=np.random.uniform(rmin,rmax,1)
                 #mu[0]=np.random.uniform(mumin,mumax,1)
@@ -298,22 +298,22 @@ with open('heavy.csv', 'rb') as fi:
                         print "Splat!", DV, CV, t, rho[i], mu[i], nu[i]
                         x,y,z=rmn2xyz(h2,h3,rho[range(0,i+1,100)],mu[range(0,i+1,100)],nu[range(0,i+1,100)])
                         
-                        plot(x,z )
+                        plot(x,z)
                         axis([-r2,r2,0,r2])
                         xlabel('x')
                         ylabel('z')
-                        title('About as simple as it gets, folks')
+                         title('About as simple as it gets, folks')
                         grid(True)
                         break
                     if nu[i]<=-h3:
                         print "Finished", DV, CV, t, rho[i], mu[i], nu[i]
                         x,y,z=rmn2xyz(h2,h3,rho[range(0,i+1,100)],mu[range(0,i+1,100)],nu[range(0,i+1,100)])
                         
-                        plot(x,z )
+                        plot(x,z)
                         axis([-r2,r2,0,r2])
                         xlabel('x')
                         ylabel('z')
-                        title('About as simple as it gets, folks')
+                         title('About as simple as it gets, folks')
                         grid(True)
                         break
                     tprime = t-np.floor(t*f)/f
