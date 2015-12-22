@@ -60,7 +60,7 @@ def trans_diff(Tt, K, q):
     #print tmp, K
     return BOLTZ*Tt*K*tmp/q
 #Constants:
-flow = 10.*0.001/60 #m3/s
+flow = 1.6*0.001/60 #m3/s
 
 re = 5e-4 #m
 
@@ -77,7 +77,11 @@ phimin=PI/2-epsilon/2
 v_entry = flow/PI/re/re
 D = 0.33 #fraction
 f = 0.5e6 #Hz
-tres=.3
+path=PI*ro
+area=(ro*ro-ri*ri)*PI
+ave_speed=flow/area
+tres=path/ave_speed
+print tres
 delt = 1/f/100 #s
 
 with open('heavy.csv', 'rb') as fi:
@@ -166,7 +170,7 @@ with open('heavy.csv', 'rb') as fi:
                     phi[i+1] = phi[i]+np.sqrt(2.0*dp*delt)*np.random.randn(1)/r[i]/np.sin(phi[i])	    
                     t=t+delt
                     i=i+1           
-            figname = "test_para_sphere_2D_{}_{}.png".format(CV,row[5])
+            figname = "test_para_sphere_2D_{}_{}_low_flow.png".format(CV,row[5])
             savefig(figname)
             close()
 

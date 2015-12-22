@@ -130,16 +130,16 @@ def trans_diff(Tt, K, q):
     return BOLTZ*Tt*K*tmp/q
 
 #Constants:
-flow = 10.*0.001/60 #m3/s
+flow = 1.6*0.001/60 #m3/s
 re = 5e-4
 A1 = 24e-3
-A2 = 12e-3
-A3 = 10e-3
+A2 = 16e-3
+A3 = 15e-3
 h2 = np.sqrt(np.power(A1,2)-np.power(A3,2))
 h3 = np.sqrt(np.power(A1,2)-np.power(A2,2))
 
 r1 = 24e-3
-r2 = 26e-3
+r2 = 25e-3
 rbar = (r1+r2)/2.0
 B = eB(r1,r2,h2,h3)
 print B
@@ -151,17 +151,16 @@ numin=0#np.sqrt(1-re*re/(r2*r2-h3*h3))
 mumax=h3+re
 mumin=h3
 
-##zmax = np.sqrt(rmax*rmax-h3*h3)
-##zmin = np.sqrt(rmin*rmin-h3*h3)
-##ymax = re
-##ymin = 0
-##xmax = re
-##xmin = 0
+
 #Init velocity: 
 v_entry = flow/PI/re/re
 D = 0.33 #fraction
 f = 0.5e6 #Hz
-tres=.3
+path=PI*np.sqrt(2.0*(r2*r2-h2*h2+r2*r2-h3*h3))/4.0
+area=(np.sqrt((r2*r2-h2*h2)*(r2*r2-h3*h3))-np.sqrt((r1*r1-h2*h2)*(r1*r1-h3*h3)))*PI
+ave_speed=flow/area
+tres=path/ave_speed*1.5
+print tres
 delt = 1/f/100 #s
 
 with open('heavy.csv', 'rb') as fi:
@@ -180,24 +179,19 @@ with open('heavy.csv', 'rb') as fi:
             
         
         #Parallel
-        for iCV in range(0,5):
+        for iCV in range(0,11):
             for iMC in range(0,9):
 
                 rho=np.zeros([tres/delt,1])
                 mu=np.zeros([tres/delt,1])
                 nu=np.zeros([tres/delt,1])
                 DV = 4000 #V   
-                CV = -9+iCV*1.0 #V
+                CV = -10+iCV*1.0 #V
 
                 HV = DV+CV
                 LV = -DV*D/(1-D)+CV
 
             #Init location:
-##                x=np.random.uniform(xmin,xmax,1)
-##                y=np.random.uniform(ymin,ymax,1)
-##                z=np.random.uniform(zmin,zmax,1)
-##                print x,y,z
-##                rho[0], mu[0], nu[0] = xyz2rmn(h2,h3,x,y,z)
 
                 rho[0]=np.random.uniform(rmin,rmax,1)
                 mu[0]=np.random.uniform(mumin,mumax,1)                    
@@ -262,31 +256,25 @@ with open('heavy.csv', 'rb') as fi:
                     t=t+delt
                     i=i+1           
 
-            figname = "test_para_ellipsoid_2D_{}_{}_long_quarter.png".format(CV,row[5])
+            figname = "test_para_ellipsoid_2D_{}_{}_low_flow_long_quarter_narrow_taller.png".format(CV,row[5])
             savefig(figname)
             close()
 
                         
         #Ortho
-        for iCV in range(0,5):
+        for iCV in range(0,11):
             for iMC in range(0,9):
 
                 rho=np.zeros([tres/delt,1])
                 mu=np.zeros([tres/delt,1])
                 nu=np.zeros([tres/delt,1])
                 DV = 4000 #V   
-                CV = -9+iCV*1.0 #V
+                CV = -10+iCV*1.0 #V
 
                 HV = DV+CV
                 LV = -DV*D/(1-D)+CV
 
             #Init location:
-##                x=np.random.uniform(xmin,xmax,1)
-##                y=np.random.uniform(ymin,ymax,1)
-##                z=np.random.uniform(zmin,zmax,1)
-##                print x,y,z
-##                rho[0], mu[0], nu[0] = xyz2rmn(h2,h3,x,y,z)
-
                 rho[0]=np.random.uniform(rmin,rmax,1)
                 mu[0]=np.random.uniform(mumin,mumax,1)
                 nu[0]=np.random.uniform(numin,numax,1)
@@ -349,7 +337,7 @@ with open('heavy.csv', 'rb') as fi:
                         mu[i+1]=mu[i]+np.sqrt(2.0*dmu*delt)*np.random.randn(1)/hmu(h2,h3,rho[i],mu[i],nu[i])
                     t=t+delt
                     i=i+1           
-            figname = "test_ortho_ellipsoid_2D_{}_{}_long_quarter.png".format(CV,row[5])
+            figname = "test_ortho_ellipsoid_2D_{}_{}_low_flow_long_quarter_narrow_taller.png".format(CV,row[5])
             savefig(figname)
             close()
 

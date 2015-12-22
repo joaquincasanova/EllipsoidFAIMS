@@ -130,7 +130,7 @@ def trans_diff(Tt, K, q):
     return BOLTZ*Tt*K*tmp/q
 
 #Constants:
-flow = 10.*0.001/60 #m3/s
+flow = 1.6*0.001/60 #m3/s
 re = 5e-4
 A1 = 12e-3
 A2 = 6e-3
@@ -155,7 +155,11 @@ mumin=h3
 v_entry = flow/PI/re/re
 D = 0.33 #fraction
 f = 0.5e6 #Hz
-tres=.3
+path=PI*np.sqrt(2.0*(r2*r2-h2*h2+r2*r2-h3*h3))/2.0
+area=(np.sqrt((r2*r2-h2*h2)*(r2*r2-h3*h3))-np.sqrt((r1*r1-h2*h2)*(r1*r1-h3*h3)))*PI
+ave_speed=flow/area
+tres=path/ave_speed*1.5
+print tres
 delt = 1/f/100 #s
 
 with open('heavy.csv', 'rb') as fi:
@@ -250,7 +254,7 @@ with open('heavy.csv', 'rb') as fi:
                     t=t+delt
                     i=i+1           
 
-            figname = "test_para_ellipsoid_2D_{}_{}.png".format(CV,row[5])
+            figname = "test_para_ellipsoid_2D_{}_{}_low_flow.png".format(CV,row[5])
             savefig(figname)
             close()
 
@@ -331,7 +335,7 @@ with open('heavy.csv', 'rb') as fi:
                         mu[i+1]=mu[i]+np.sqrt(2.0*dmu*delt)*np.random.randn(1)/hmu(h2,h3,rho[i],mu[i],nu[i])
                     t=t+delt
                     i=i+1           
-            figname = "test_ortho_ellipsoid_2D_{}_{}.png".format(CV,row[5])
+            figname = "test_ortho_ellipsoid_2D_{}_{}_low_flow.png".format(CV,row[5])
             savefig(figname)
             close()
 
